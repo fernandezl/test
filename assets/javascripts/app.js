@@ -21,13 +21,7 @@ newsfeedApp.controller('NewsController', ['$scope', 'NewsFeedServices', '$q', fu
             token: "8edjjh0jsggscgoscokk8ok0gc40ss0",
             mock: "false"
         }, function (data) {
-            console.log(data.data.feed_items);
             $scope.data = data.data.feed_items;
-
-            $scope.data.feed_items.forEach(function(item){
-                if(item.type !== "publication") console.log(item.type, item);
-            });
-
             $scope.loading = false;
 
         }, function (err) {
