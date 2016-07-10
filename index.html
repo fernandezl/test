@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,600,300' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="assets/stylesheets/default.css">
+		
+		<title>Flux d'actu Wizbii</title>
+	</head>
+
+	<body ng-app="newsfeedApp">
+
+		<div class="container">
+
+			<div class="row alert alert-danger" ng-if="errors.length" ng-repeat="error in errors">{{error}}</div>
+
+			<div class="row feed-container" ng-controller="NewsController" ng-init="init()">
+
+				<div class="loading" ng-if="loading" ><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span></div>
+
+				<div class="feed-item feed-item-{{feedItem.type}}" ng-repeat="feedItem in data.feed_items | orderBy:'$$hashKey'" id="feed-item-{{feedItem.id}}" ng-switch="feedItem.type">
+					<a href="#" class="feed-item-hide" ng-click="feedItem.type='hidden'" title="Cacher cette publication"><span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
+
+					<div ng-switch-when="suggested-tag">
+						<p>Ajoute de nouveaux tags pour recevoir plus d'actualité !</p>
+						<p class="suggested-tags"><span class="suggested-tag" ng-repeat="tag in feedItem.tags">#{{tag.name}}</span></p>
+						<div class="clearfix"></div>
+					</div>
+
+					<div ng-switch-when="gmail-connect">
+						<p><span class="glyphicon glyphicon-envelope"></span></p>
+						<p ng-if="feedItem.already_linked">Ajouter mes contacts Gmail</p>
+						<p ng-if="!feedItem.already_linked">Se connecter avec Gmail</p>
+						<p><a class="btn btn-default" href="#">Découvrir</a></p>
+					</div>
+
+					<div ng-switch-when="relation-new">
+						<p><span class="glyphicon glyphicon-heart"></span></p>
+						<p>Tu as {{feedItem.count_relation_new}} nouvelle(s) relation(s) !</p>
+						<p>Ton réseau compte {{feedItem.count_total_relations}} relations !</p>
+						<p><a class="btn btn-info" href="#">Voir toutes mes relations</a></p>
+					</div>
+
+					<div ng-switch-when="suggested-job">
+						<p><span class="glyphicon glyphicon-briefcase"></span></p>
+						<p>Wow ! Nous avons {{feedItem.count_suggested_jobs}} jobs pour toi !</p>
+						<p><a class="btn btn-primary" href="#">Découvrir</a></p>
+					</div>
+
+					<div ng-switch-when="search-engine">
+						<p>A la recherche d'un nouveau job, d'un stage ?</p>
+						<p>Trouve ton bonheur parmi les {{feedItem.nb_job}} offres sur Wizbii !</p>
+						<form class="form-inline">
+							<input class="form-control" type="text" name="search" placeholder="Tape un mot clé (ex: Marketing)" />
+							<button type="submit" class="btn btn-primary">Recherche</button>
+						</form>
+					</div>
+
+					<div ng-switch-when="facebook-connect">
+						<p><span class="glyphicon glyphicon-user"></span></p>
+						<p>Invite tes amis à te rejoindre sur Wizbii !</p>
+						<p><a class="btn btn-primary" href="#">Partager sur mon profil Facebook</a></p>
+					</div>
+
+					<div ng-switch-when="suggested-profile" ng-if="feedItem.suggested_profiles.suggestions.length">
+						<p><span class="glyphicon glyphicon-random"></span></p>
+						<p>Hey ! Nous pensons que tu pourrais connaître ces personnes !</p>
+						<div class="row">
+							<div class="col-xs-6 profile" ng-repeat="suggestion in feedItem.suggested_profiles.suggestions | limitTo: 4 track by $index">
+								<a href="#" class="pull-left" ng-if="suggestion.profile.avatar"><img class="suggestion-avatar" ng-src="{{suggestion.profile.avatar}}" /></a>
+								<p><a href="#">{{suggestion.profile.name}}</a></p>
+								<p ng-repeat="reasons in suggestion.reasons">
+									<span ng-repeat="reason_step in reasons.reason_steps">
+										<span ng-if="reason_step.type=='profile_level2'">est ami avec <a href="#">{{reason_step.profile.name}}</a></span>
+										<span ng-if="reason_step.type=='school'">Diplôme <a href="#">{{reason_step.school.name}}</a></span>
+										<span ng-if="reason_step.type=='tag'"><a href="#">#{{reason_step.tag.name}}</a></span>
+									</span>
+								</p>
+								<button class="btn btn-info btn-xs" ng-click="feedItem.suggested_profiles.suggestions.splice($index, 1)">Ajouter</button>
+								<button class="btn btn-default btn-xs" ng-click="feedItem.suggested_profiles.suggestions.splice($index, 1)">X</button>
+								<div class="clearfix"></div>
+							</div>
+						</div>
+					</div>
+
+
+					<div ng-switch-default>
+
+						<div class="feed-item-header row">
+							<a href="#" class="pull-left" ng-if="feedItem.publication.profile.avatar"><img class="feed-item-avatar" ng-src="{{feedItem.publication.profile.avatar}}" /></a>
+							<p><a href="#" class="">{{feedItem.publication.poster.displayName}}</a><span ng-if="feedItem.publication.type==='PROFILE_NETWORK_UPDATED'"> a mis à jour son profil</span> - {{feedItem.date | timeAgo}}</p>
+							<p>{{feedItem.publication.profile.title}}</p>
+						</div>
+
+						<div class="feed-item-content row" ng-if="feedItem.publication.content">
+							<p class="feed-item-tags"><span class="tag" ng-repeat="tag in feedItem.publication.tags">#{{tag.name}}</span></p>
+							<p ng-bind-html="feedItem.publication.content | nl2br"></p>
+							<img ng-src="{{feedItem.publication.attachment_picture}}" ng-title="{{feedItem.publication.attachment_title}}"/>
+						</div>
+
+						<div class="feed-item-actions row">
+							<div class="col-xs-6">
+								<button class="btn btn-default" ng-if="!feedItem.publication.liked" ng-click="thanks(feedItem.publication)"><span class="glyphicon glyphicon-thumbs-up"></span>Envoyer un thanx</button>
+								<button class="btn btn-default highlight" ng-if="feedItem.publication.liked" ng-click="unThanks(feedItem.publication)"><span class="glyphicon glyphicon-thumbs-up"></span>Annuler mon thanx</button>
+							</div>
+							<div class="col-xs-6">
+								<button class="btn btn-default" ng-disabled="feedItem.shared" ng-click="feedItem.publication.shared=true;" ng-class="{highlight: feedItem.publication.shared}"><span class="glyphicon glyphicon-share"></span>Partager avec un ami !</button>
+							</div>
+						</div>
+
+						<div class="feed-item-social row">
+							<span class="feed-item-comments-count" ng-class="{highlight: feedItem.publication.comments.length}">{{feedItem.publication.comments.length}} commentaire<span ng-if="feedItem.publication.comments.length > 1">s</span></span>
+							<span class="feed-item-likes-count" ng-class="{highlight: feedItem.publication.likes.length}">{{feedItem.publication.likes.length}} thanx</span>
+						</div>
+
+						<div class="feed-item-comments row">
+							<div class="feed-item-comment" ng-repeat="comment in feedItem.publication.comments" ng-if="comment.status === 'visible'">
+								<p><a href="#" class="pull-left" ng-if="comment.profile.avatar"><img class="comment-avatar" ng-src="{{comment.profile.avatar}}" /></a><a href="#" class="">{{comment.poster.displayName}}</a></p>
+								<p ng-bind-html="comment.content | nl2br"></p>
+								<p>{{comment.date_created | timeAgo}} - <span class="comment-likes-count" ng-class="{highlight: comment.likes.length}">{{comment.likes.length}} thanx</span> <button class="btn-link" ng-click="thanks(comment)" ng-if="!comment.liked">Thanx !</button> <button class="btn-link" ng-click="unThanks(comment)" ng-if="comment.liked">Annuler mon thanx !</button>
+							</div>
+
+							<form name="commentForm">
+								<textarea rows="2" name="comment" placeholder="Ajouter un commentaire..." ng-model="feedItem.publication.newComment" ng-keyup="$event.keyCode == 13 && comment(feedItem.publication, feedItem.publication.newComment)" required></textarea>
+							</form>
+
+						</div>
+						<div class="feed-item-reasons" ng-repeat="reasons in feedItem.reasons">
+							Tu vois ceci car
+							<span class="reason reason-{{step.type}}" ng-repeat="step in reasons.reason_steps">
+								<span ng-if="step.type=='tag'">tu es abonné au tag #{{step.tag.name}}</span>
+								<span ng-if="step.type=='profile_level1'">tu es ami avec {{step.profile.name}}</span>
+								<span ng-if="step.type=='profile_level2'">{{feedItem.publication.poster.displayName}} est ami avec {{step.profile.name}}</span>
+								<span ng-if="step.type=='school'">tu as le diplôme {{step.school.name}}</span>
+								
+							</span>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+
+
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+		<script type="text/javascript" src="node_modules/angular-timeago/dist/angular-timeago.min.js"></script>
+		<script type="text/javascript" src="node_modules/angular-resource/angular-resource.min.js"></script>
+		<script type="text/javascript" src="assets/javascripts/services.js"></script>
+		<script type="text/javascript" src="assets/javascripts/app.js"></script>
+	</body>
+</html>

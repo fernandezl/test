@@ -1,0 +1,256 @@
+body {
+	background:#eee;
+	font-size:13px;
+	font-family: 'Open Sans', sans-serif;
+}
+
+
+
+
+
+.feed-item {
+	margin:12px;
+	background:#fff;
+	border-radius: 4px;
+	max-width:600px;
+	margin:16px auto;
+	padding:16px;
+	position:relative;
+}
+
+.feed-item .row {
+	margin:0;
+	padding:8px 0;
+}
+
+
+
+.feed-item .feed-item-hide {
+	color:#777;
+	right:16px;
+	top:16px;
+	position:absolute;
+}
+
+
+
+
+.feed-item .feed-item-header {
+	clear:both;
+	border-bottom:1px solid #eee;
+	color:#777;
+}
+
+.feed-item .feed-item-header .feed-item-avatar {
+	width:40px;
+	height:40px;
+	border-radius: 50%;
+	float:left;
+	margin-right:8px;
+}
+
+.feed-item .feed-item-header a{
+	font-size:14px;
+	font-weight:600;
+}
+
+.feed-item .feed-item-header p{
+	line-height:20px;
+	margin:0;
+}
+
+
+
+
+.feed-item .feed-item-content .tag{
+	font-weight:600;
+	color:#333;
+	margin-right:8px;
+    display: inline-block;
+}
+
+.feed-item .feed-item-content img{
+	max-width:100%;
+}
+
+
+
+
+.feed-item .feed-item-actions {
+	text-align: center;
+}
+
+.feed-item .feed-item-actions .btn{
+	border:none;
+}
+.feed-item .feed-item-actions .btn span{
+	margin-right:8px;
+}
+
+
+.feed-item .feed-item-social {
+	border-bottom:1px solid #eee;
+}
+
+.feed-item .feed-item-social span {
+	margin-right:8px;
+}
+
+
+
+
+.feed-item-comment {
+	font-size:12px;
+	padding:0 16px;
+}
+
+.feed-item-comment .comment-avatar {
+	height:24px;
+	width:24px;
+	border-radius:50%;
+	margin-right:8px;
+}
+
+.feed-item-comments textarea {
+	background:#eee;
+	border-radius: 4px;
+	width:100%;
+	color:#111;
+	border:#ddd;
+	padding:8px;
+}
+
+.feed-item-comments .btn-link {
+	font-size:12px;
+}
+
+
+.feed-item-reasons {
+	text-align: center;
+	font-weight:bold;
+	color:#999;
+}
+
+/* special publications */
+
+.feed-item.feed-item-gmail-connect,
+.feed-item.feed-item-facebook-connect,
+.feed-item.feed-item-search-engine,
+.feed-item.feed-item-suggested-job,
+.feed-item.feed-item-suggested-profile,
+.feed-item.feed-item-suggested-tag,
+.feed-item.feed-item-relation-new {
+	font-size:16px;
+	font-weight:bold;
+	text-align: center;
+}
+
+.feed-item.feed-item-gmail-connect p .glyphicon,
+.feed-item.feed-item-facebook-connect p .glyphicon,
+.feed-item.feed-item-suggested-profile p .glyphicon,
+.feed-item.feed-item-suggested-job p .glyphicon,
+.feed-item.feed-item-relation-new p .glyphicon {
+	font-size:36px;
+}
+
+.feed-item.feed-item-gmail-connect {
+	background:#d84c3f;
+	color:#fff;
+}
+
+.feed-item.feed-item-gmail-connect .glyphicon{
+	color:#a0382f;
+}
+
+.feed-item.feed-item-relation-new .glyphicon,
+.feed-item.feed-item-facebook-connect .glyphicon,
+.feed-item.feed-item-suggested-job .glyphicon{
+	color:#337ab7;
+}
+
+.feed-item.feed-item-suggested-profile .glyphicon{
+	color:#dff0d8;
+}
+
+.feed-item.feed-item-suggested-job {
+	background:#5bc0de;
+	color:#fff;
+}
+
+.feed-item.feed-item-suggested-tag .suggested-tag {
+	display: inline-block;
+	border-radius:4px;
+	float:left;
+	margin:4px;
+	padding:4px 8px;
+	border:1px solid #337ab7;
+	color:#337ab7;
+	cursor:pointer;
+	font-weight:bold;
+	font-size:13px;
+}
+
+.feed-item-suggested-profile .suggestion-avatar {
+	width:60px;
+	height:60px;
+	border-radius: 50%;
+	float:left;
+	margin-right:8px;
+}
+
+.feed-item-suggested-profile .profile {
+	text-align: left;
+	margin:8px 0;
+}
+
+.feed-item-suggested-profile .profile p {
+	font-size:12px;
+	line-height:20px;
+	margin:0;
+	padding:0;
+	display: block;	
+	font-weight: normal;
+}
+
+.feed-item-suggested-profile a {
+	font-weight: bold;
+}
+
+
+/* common */
+.highlight {
+	color: #337ab7 !important;
+}
+
+.strong {
+	font-weight:bold !important;
+}
+
+.full-width {
+	padding:auto 0;
+	width:100%;
+}
+
+
+/* Loading */
+.loading {
+	width:100%;
+	text-align:center;
+	margin-top:16px;
+}
+
+.glyphicon-refresh-animate {
+	font-size:24px;
+    -animation: spin .7s infinite linear;
+    -webkit-animation: spin2 .7s infinite linear;
+}
+
+@-webkit-keyframes spin2 {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
+}
